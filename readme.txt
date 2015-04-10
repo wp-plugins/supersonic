@@ -21,7 +21,7 @@ When content is changed plugin purges only files previously served to CloudFlare
 
 Wordpress SuperSonic with CloudFlare integrates Wordpress with CloudFlare for more speed and security. With this plugin Wordpress pages will load as fast as 100 miliseconds!
 
-Major features:
+= Major features =
 * automatically purge changed pages from CloudFlare cache (posts, pages, custom post types and associates pages: categories, tags, date archives)
 * country information of commenter in comments
 * bruteforce protection by bannig IP address in CloudFlare
@@ -32,6 +32,9 @@ Major features:
 * displays CloudFlare statistics for domain
 * event logging
 
+= Example sites with SuperSonic plugin - check how fast they loading =
+* [Site 1](http://www.wp-supersonic.com/ "www.wp-supersonic.com")
+* [Site 2](http://www.zespoldowna.info/ "www.zespoldowna.info")
  
 == Installation ==
 
