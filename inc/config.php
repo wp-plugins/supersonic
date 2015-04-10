@@ -258,7 +258,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
     <?php
     echo '<h2 class="nav-tab-wrapper">';
     foreach( $tabs as $tab => $name ){
-        $class = ( $tab == $current ) ? ' nav-tab-active' : '';
+        $class = ( $tab2 == $current ) ? ' nav-tab-active' : '';
         echo "<a class='nav-tab$class' href='?page=wpss&tab=$tab'>$name</a>";
     }
     echo '</h2>';
@@ -266,8 +266,9 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
     if ($tab == 'log') {
     	$form_method = 'GET';
     }
+    //echo $tab;    
     ?>
-    <?php if ($tab != 'tools'	&& $tab != 'statistics' && $tab != 'documentation' && $tab != 'log' && $tab != 'donate') { ?>
+    <?php if ($current != 'tools'	&& $current != 'statistics' && $current != 'documentation' && $current != 'log' && $current != 'donate') { ?>
     <form id="wpss_settings" method="<?php echo $form_method; ?>" action="<?php /* echo admin_url( 'admin.php?page=wpss&tab='.$tab ); */ ?>">
     <?php } ?>
 			<?php
@@ -900,7 +901,7 @@ Wordpress SuperSonic with CloudFlare has required a great deal of time and effor
 			?>
 			<p class="submit" style="clear: both;">
 			<?php 
-				if ($tab != 'tools'	&& $tab != 'statistics' && $tab != 'documentation' && $tab != 'log' && $tab != 'donate') {
+				if ($current != 'tools'	&& $current != 'statistics' && $current != 'documentation' && $current != 'log' && $current != 'donate') {
 			?>
   		<input type="submit" name="Submit"  class="button-primary" value="Update Settings" />
       <input type="hidden" name="wpss-config-submit" value="Y" />
