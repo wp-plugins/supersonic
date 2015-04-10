@@ -4,7 +4,7 @@ Donate link:
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN
 Requires at least: 3.6
 Tested up to: 4.1
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,10 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 6. Comment list
 
 == Changelog ==
+
+= 1.0.11 =
+* Added zone to CloudFlare connection test
+* Cosmetic changes in statistics
 
 = 1.0.10 =
 * Fixed bug in configuration form

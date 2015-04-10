@@ -86,7 +86,7 @@ function wpss_config_handler() {
   	$settings = get_option( "wpss_settings" );
 		$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);  	
 		$url = site_url().'/?testcf';
-		$ret = $cf->zone_file_purge($settings['cloudflare_domain'],$url);		
+		$ret = $cf->stats($settings['cloudflare_domain'],40);
 		if ($ret->result != 'success') {
 			$msg = '';
 			if (is_object($ret)) {
@@ -258,7 +258,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
     <?php
     echo '<h2 class="nav-tab-wrapper">';
     foreach( $tabs as $tab => $name ){
-        $class = ( $tab2 == $current ) ? ' nav-tab-active' : '';
+        $class = ( $tab == $current ) ? ' nav-tab-active' : '';
         echo "<a class='nav-tab$class' href='?page=wpss&tab=$tab'>$name</a>";
     }
     echo '</h2>';

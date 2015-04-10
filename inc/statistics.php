@@ -32,7 +32,7 @@ function wpss_cf_statistics() {
 	<div style="clear:both;"></div>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript">
-		var stats = <?php echo json_encode($stats); ?>;
+		var stats = null;<?php /* echo json_encode($stats); */ ?>;
 		//
 		function get_charts() {
 			jQuery('div#pageviews').html('');
@@ -56,10 +56,11 @@ function wpss_cf_statistics() {
 		}
 		//
    	google.load("visualization", "1", {packages:["corechart"]});
-   	google.setOnLoadCallback(get_charts);
+  	google.setOnLoadCallback(start_charts);
 		//
     function drawChartPageViews() {
       	var pageviews = stats.stats.response.result.objs[0].trafficBreakdown.pageviews;
+      	//console.log(pageviews);
 				var data = google.visualization.arrayToDataTable([
           ['Page Views', "Views"],
           ['Regular', pageviews.regular],
@@ -122,6 +123,9 @@ function wpss_cf_statistics() {
 
         chart.draw(data, options);
     }
+   	function start_charts() {
+	   	jQuery("#period").change();
+	  }
 		//
 		jQuery(document).ready( function() {
    		jQuery("#period").change( function() {
@@ -136,7 +140,7 @@ function wpss_cf_statistics() {
         	 data : {action: 'wpss_stat', period: period, nonce: nonce},
 	         success: function(ret) {
   	       		stats = ret;
-    	     		console.log(stats);
+    	     		//console.log(stats);
 							get_charts();
         	 },
 	         complete: function() {
@@ -158,15 +162,22 @@ function wpss_stat_ajax() {
 	//
 	$settings = get_option( "wpss_settings" );
 	$default_stats = $period;
-	$stats = get_option("wpss_stats_".$default_stats);
-	error_log(serialize($stats));
-	if ($stats === false || is_array($stats['stats']) || $stats['time']+600 < current_time('timestamp') || $settings['update_time'] > $stats['time']) {
-		$stats = array();
-		$stats['time'] = current_time('timestamp');
-		$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);			
-		$stats['stats'] = $cf->stats($settings['cloudflare_domain'],$default_stats);
-		update_option("wpss_stats_".$default_stats,$stats,3600);
+	$stats = get_option("wpss_stats",false);
+	if ($stats === false) {
+		add_option( 'wpss_stats', array(), '', 'no' );
 	}
-	echo json_encode($stats);
+	$stats_period = array();
+	if (isset($stats[$period])) {
+		$stats_period = $stats[$period];
+	}
+	if ($stats_period === false || !is_array($stats_period['stats']) || (intval($stats_period['time'])+600) < current_time('timestamp') || $settings['update_time'] > $stats_period['time']) {
+		$stats_period = array();
+		$stats_period['time'] = current_time('timestamp');
+		$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);			
+		$stats_period['stats'] = $cf->stats($settings['cloudflare_domain'],$default_stats);
+		$stats[$period] = $stats_period;
+		update_option('wpss_stats',$stats);
+	}
+	echo json_encode($stats_period);
 	die();
 }
