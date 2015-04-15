@@ -241,11 +241,21 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 		if (!isset($settings['security']['bruteforce_reset'])) {
 			$settings['security']['bruteforce_reset'] = 300;
 		}
-    $tabs = array( 'cloudflare' => 'Cloudflare Settings'
+    $tabs = array( 'cloudflare' => 'CF Settings'
     						 , 'options' => 'Options'
-    						 , 'tools' => 'Tools'
-    						 , 'post_types' => 'Cache Purge
-    						 '/*, 'comments' => 'Comments'*/
+    						 , 'tools' => 'CF Tools'
+    						 , 'post_types' => 'Purge Settings'
+    						 /*, 'comments' => 'Comments'*/
+    						 , 'security' => 'Security'
+    						 , 'log' => 'Log'
+    						 , 'statistics' => 'Statistics'
+    						 , 'documentation' => 'Documentation'
+    						 , 'donate' => 'Donate' );
+    $tab_hints = array( 'cloudflare' => 'Cloudflare Settings'
+    						 , 'options' => 'Options'
+    						 , 'tools' => 'CloudFlare Tools'
+    						 , 'post_types' => 'Purge Settings on posts, pages and comments'
+    						 /*, 'comments' => 'Comments'*/
     						 , 'security' => 'Security'
     						 , 'log' => 'Log'
     						 , 'statistics' => 'Statistics'
@@ -259,7 +269,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
     echo '<h2 class="nav-tab-wrapper">';
     foreach( $tabs as $tab => $name ){
         $class = ( $tab == $current ) ? ' nav-tab-active' : '';
-        echo "<a class='nav-tab$class' href='?page=wpss&tab=$tab'>$name</a>";
+        echo "<a class='nav-tab$class' href='?page=wpss&tab=$tab' title='".$tab_hints[$tab]."'>$name</a>";
     }
     echo '</h2>';
     $form_method = 'POST';

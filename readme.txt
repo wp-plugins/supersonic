@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: kursorA
 Donate link: 
-Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN
+Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.1
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,7 +57,9 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 3. Tools
 4. Cache purge configuration
 5. Security
-6. Comment list
+6. Log
+7. Statistics
+8. Comment list
 
 == Changelog ==
 

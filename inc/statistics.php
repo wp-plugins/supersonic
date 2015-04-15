@@ -24,9 +24,9 @@ function wpss_cf_statistics() {
 	<div id='wpss_stats_error' style="width:100%; color:red; font-weight: bold;">
 	</div><br/>
 	<div style="width:100%">
-		<div id="pageviews" style="width:100%; max-width:350px; height:300px; float:left; display:none;"></div>
-		<div id="uniques" style="width:100%; max-width:350px; height:300px; float:left; display:none;"></div>
-		<div id="bandwidth" style="width:100%; max-width:350px; height:300px; float:left; display:none;"></div>
+		<div id="pageviews" style="width:100%; max-width:300px; height:300px; float:left; display:none;"></div>
+		<div id="uniques" style="width:100%; max-width:300px; height:300px; float:left; display:none;"></div>
+		<div id="bandwidth" style="width:100%; max-width:300px; height:300px; float:left; display:none;"></div>
 		<div style="clear:both;"></div>
 	</div>
 	<div style="clear:both;"></div>
