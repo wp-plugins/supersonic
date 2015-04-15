@@ -63,6 +63,9 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 
 == Changelog ==
 
+= 1.0.12 =
+* Tabs renamed
+
 = 1.0.11 =
 * Added zone to CloudFlare connection test
 * Cosmetic changes in statistics
