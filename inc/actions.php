@@ -176,6 +176,7 @@ function wpss_determine_current_user($user_ID) {
 		$donotlogout_s = $settings['donotlogout'];
 		$donotlogout = explode("\n",$donotlogout_s);
 		foreach ($donotlogout as $url) {
+			$url = trim($url);
 			if (fnmatch($url,$_SERVER["REQUEST_URI"])) {
 				return $user_ID;
 			}
@@ -186,7 +187,7 @@ function wpss_determine_current_user($user_ID) {
 		return $user_ID;
 	}
 }
-add_filter('determine_current_user','wpss_determine_current_user',100);
+add_filter('determine_current_user','wpss_determine_current_user',1000);
 
 function wpss_wp_get_current_commenter($commenter) {
 	$commenter['comment_author'] = '';
@@ -266,6 +267,7 @@ function wpss_update($post, $comment = 0 ) {
 	if (($comment == 0 && $settings['refresh'][$post_type.'_add_clear']) || ($comment && $settings['comments']['comment_add_clear'])) {
 		$add_clear = explode("\n",$settings['refresh'][$post_type.'_add_clear']);
 		foreach ($add_clear as $url) {
+			$url = trim($url);
 			$url = str_replace('*','%',$url);
 			$sql = 'select url from '.$wpdb->prefix.'wpss_links where url like \''.$url.'\'';
 			$rows = $wpdb->get_results($sql);

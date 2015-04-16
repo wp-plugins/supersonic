@@ -4,7 +4,7 @@ Donate link:
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.1
-Stable tag: 1.0.12
+Stable tag: 1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,12 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 8. Comment list
 
 == Changelog ==
+
+= 1.0.14 =
+* Fixed not working bulk delete in Log
+
+= 1.0.13 =
+* Fixed bug in "List of URLs to purge"
 
 = 1.0.12 =
 * Tabs renamed

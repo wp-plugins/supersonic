@@ -109,7 +109,6 @@ function wpss_config_handler() {
   else if ($_GET['tab'] == 'tools') {
   	$settings = get_option( "wpss_settings" );  	
   	$tools_action = $_POST['tools_action'];
-  	//echo $tools_action;
   	if ($tools_action) {
   		if ($tools_action == 'url_list') {
   			$wpss_list_clear = $_POST['wpss_list_clear'];
@@ -117,6 +116,7 @@ function wpss_config_handler() {
   			global $wpdb;
   			$count_rows = 0;
   			foreach ($links as $link) {
+  				$link = trim($link);
   				$count_rows++;
 	  			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $link, 'priority' => 1));
   			}
@@ -133,9 +133,11 @@ function wpss_config_handler() {
   		}
   		if ($tools_action == 'ban_ip' || $tools_action == 'wl_ip' || $tools_action == 'nul_ip') {
   			$wpss_list_ip = $_POST['wpss_list_ip'];
+  			$ips = explode("\n",$wpss_list_ip);
   			$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);			
   			$errors = '';
-  			foreach ($wpss_list_ip as $ip) {
+  			foreach ($ips as $ip) {
+  				$ip = trim($ip);
   				if ($errors == '') {
   					if ($tools_action = 'ban_ip') {
   						$ret = $cf->ban($ip);
@@ -147,7 +149,7 @@ function wpss_config_handler() {
   						$ret = $cf->nul($ip);
   					}
 						if ($ret->result != 'success') {
-							$errors = $ret->msg;
+							$errors = $ret->msg.' '.$ip;
 						}
 					}
   			}
@@ -379,28 +381,33 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
         <tr>
         	<th><label for="wpss_list_clear">List of URLs to clear:</label></th>
             <td>
-            	<textarea style="width:340px;height:100px;" id="wpss_list_clear" name="wpss_list_clear" ></textarea><br/>
-            	<span class="description">
-            		Enter single URL or list of URLs to purge from CloudFlare cache. Each URL in new line.<br/>
-            		<input type="button" name="url_list" class="button" value="Purge list" onclick="jQuery('#tools_action').val('url_list');this.form.submit();">
-            	</span>                              
+            	<form id="wpss_settings" method="<?php echo $form_method; ?>" action="<?php /* echo admin_url( 'admin.php?page=wpss&tab='.$tab ); */ ?>">
+            		<textarea style="width:340px;height:100px;" id="wpss_list_clear" name="wpss_list_clear" ></textarea><br/>
+            		<span class="description">
+            			Enter single URL or list of URLs to purge from CloudFlare cache. Each URL in new line.<br/>
+            		</span>                              
+            		<input type="hidden" id="tools_action" name="tools_action" value="">
+           			<input type="button" name="url_list" class="button" value="Purge list" onclick="jQuery('#tools_action').val('url_list');this.form.submit();">
+            	</form>
             </td>
         </tr>
         <tr>
         	<th><label for="wpss_list_ip">List of IP adresses:</label></th>
             <td>
-            	<textarea style="width:340px;height:100px;" id="wpss_list_ip" name="wpss_list_ip" ></textarea><br/>
-            	<span class="description">
-            		Enter single IP or list of IPs to Ban, White list or remove from list. Each IP in new line.<br/>
-            		<input type="button" name="ban_ip" class="button" value="Ban" onclick="jQuery('#tools_action').val('ban_ip');this.form.submit();">
-            		<input type="button" name="wl_ip" class="button" value="White list" onclick="jQuery('#tools_action').val('wl_ip');this.form.submit();">
-            		<input type="button" name="wl_ip" class="button" value="Nul" onclick="jQuery('#tools_action').val('nul_ip');this.form.submit();">
-            	</span>                              
+            	<form id="wpss_settings" method="<?php echo $form_method; ?>" action="<?php /* echo admin_url( 'admin.php?page=wpss&tab='.$tab ); */ ?>">
+            		<textarea style="width:340px;height:100px;" id="wpss_list_ip" name="wpss_list_ip" ></textarea><br/>
+            		<span class="description">
+            			Enter single IP or list of IPs to Ban, White list or remove from list. Each IP in new line.<br/>
+            		</span>                              
+            		<input type="hidden" id="tools_action_ip" name="tools_action" value="">
+           			<input type="button" name="ban_ip" class="button" value="Ban" onclick="jQuery('#tools_action_ip').val('ban_ip');this.form.submit();">
+           			<input type="button" name="wl_ip" class="button" value="White list" onclick="jQuery('#tools_action_ip').val('wl_ip');this.form.submit();">
+           			<input type="button" name="wl_ip" class="button" value="Nul" onclick="jQuery('#tools_action_ip').val('nul_ip');this.form.submit();">           			
+           		</form>
             </td>
         </tr>
         <?php				
-				echo '</table>';				
-				echo '<input type="hidden" id="tools_action" name="tools_action" value="">';
+				echo '</table>';								
 			}
 			if ($tab == 'post_types') {
 				$post_types = get_post_types( array( 'public' => true ), 'objects' ); 
@@ -546,7 +553,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 					<td>
 						<select name="bruteforce_protection">
 							<option value="0" <?php echo $settings['security']['bruteforce_protection']=='0'?'selected':''; ?>>Disabled</option>
-							<option value="1" <?php echo $settings['security']['bruteforce_protection']=='1'?'selected':''; ?>>Enbled</option>
+							<option value="1" <?php echo $settings['security']['bruteforce_protection']=='1'?'selected':''; ?>>Enabled</option>
 						</select>
 						<br/>
 						<span class="description"></span>
@@ -833,10 +840,14 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
         	$message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Items deleted: %d', 'wpss'), count($_REQUEST['id'])) . '</p></div>';
     		}
     		?>
-    		<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
-    		<input type="hidden" name="tab" value="log"/>
+				<form method="post">
+    			<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
+    			<input type="hidden" name="tab" value="log"/>
+    			<?php
+    				$table->display();
+    			?>
+    		</form>
     		<?php
-    		$table->display();
 			}
 			if ($tab == 'statistics') {
 				?>
