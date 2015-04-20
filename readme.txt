@@ -63,6 +63,10 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 
 == Changelog ==
 
+= 1.0.15 =
+* New log message for purge error in wp-cron
+* Admin message in SuperSonic screen with pages count to purge from cache
+
 = 1.0.14 =
 * Fixed not working bulk delete in Log
 

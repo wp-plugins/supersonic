@@ -18,6 +18,7 @@ function wpss_log($event, $info = '', $ip = null, $ip_country = null) {
 	14 - ip ban from log
 	17 - ip wl from log
 	18 - ip nul from log
+	20 - cron job
 	*/
 	$settings = get_option( "wpss_settings", array('event_log' => 0) );
 	if ($settings['event_log'] == '1') {
@@ -204,6 +205,7 @@ class WPSS_Log_List_Table extends WP_List_Table {
           when event = 14 then 'IP ban from log view'
           when event = 17 then 'IP white listed from log view'
           when event = 18 then 'IP nul from log view'
+          when event = 20 then 'Cron job'
           else 'Undefined'
         end as event_description
         FROM $table_name 

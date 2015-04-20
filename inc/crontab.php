@@ -21,9 +21,13 @@ function wpss_clear_f() {
 		if (strpos($url,'/') === 0) {
 			$url = site_url().$url;
 		}
+		if (trim($url) == '') {
+			$url = site_url();
+		}
 		$ret = $cf->zone_file_purge($settings['cloudflare_domain'],$url);		
 		if ($ret->result != 'success') {
 			wp_schedule_single_event( time()+60, 'wpss_clear' );
+			wpss_log(20,'Purge failed: '.$ret->msg.' for &quot;'.$url.'&quot;');
 			return;
 		}
 		$wpdb->delete($wpdb->prefix.'wpss_clear',array('url' => $row->url));

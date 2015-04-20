@@ -68,6 +68,16 @@ function wpss_config_handler() {
   echo '<div class="wrap">';
   echo '<div id="icon-settings" class="icon32"><br></div>';
   echo '<h2>Wordpress SuperSonic with CloudFlare</h2>';
+	global $wpdb;  
+	$sql = "select count(*) to_clear from ".$wpdb->prefix."wpss_clear";
+	$to_clear = $wpdb->get_row($sql);
+	if ($to_clear->to_clear) {
+		?>
+			<div class="error">
+    	    <p><?php _e( 'There is <b>'.$to_clear->to_clear.'</b> pages in queue to purge from CloudFlare cache.', 'wpss' ); ?></p>
+    	</div>   			
+    <?php
+	}
   //echo '<em>Takes Wordpress to Supersonic speed with CloudFlare</em><br/><br/>';
 	if ( $_POST["wpss-config-submit"] == 'Y' ) {
 		//echo 1;
@@ -112,8 +122,7 @@ function wpss_config_handler() {
   	if ($tools_action) {
   		if ($tools_action == 'url_list') {
   			$wpss_list_clear = $_POST['wpss_list_clear'];
-  			$links = explode("\n",$wpss_list_clear);
-  			global $wpdb;
+  			$links = explode("\n",$wpss_list_clear);  			
   			$count_rows = 0;
   			foreach ($links as $link) {
   				$link = trim($link);
@@ -184,7 +193,6 @@ function wpss_config_handler() {
     		<?
 			}
 			else {
-				global $wpdb;
 				$table_name = $wpdb->prefix . 'wpss_links';
 				$wpdb->query('TRUNCATE '.$table_name);
 				$table_name = $wpdb->prefix . 'wpss_clear';
@@ -197,7 +205,6 @@ function wpss_config_handler() {
 			}		
   	}
   	else if ($_GET['wpss_action'] == 'clear_cached') {
-			global $wpdb;
 			$count_rows = 0;
 			$sql = 'select url from '.$wpdb->prefix.'wpss_links';
 			$rows = $wpdb->get_results($sql);
