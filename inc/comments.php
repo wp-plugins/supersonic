@@ -36,7 +36,7 @@ function wpss_comment_column( $column, $comment_ID ) {
 					$color = '#880000';
 				}
 			}
-			echo '<div style="color:'.$color.';">'.$wpss_countries[$meta].'<br/><img style="margin-top:5px;" src="'.plugins_url().'/supersonic/flags/'.strtolower($meta).'.png"/><span id="spinner-'.$comment_ID.'" class="spinner"></span></div>';
+			echo '<div style="color:'.$color.';">'.$wpss_countries[$meta].'<br/><img style="margin-top:5px;" src="'.plugins_url('/supersonic/flags/').strtolower($meta).'.png"/><span id="spinner-'.$comment_ID.'" class="spinner"></span></div>';
 			echo '<div class="row-actions"><strong>IP</strong>: <span class="delete">';
 			echo '<a title="Ban IP in CloudFlare" href="javascript:void(0);" onclick="wpss_ip_action(\''.$ip.'\',\''.$ip_country.'\',\'ban\',\''. wp_create_nonce( 'wpss_ip_nonce' ).'\','.$comment_ID.');" class="delete">BAN</a></span>';
 			echo '<span> | <a title="White list IP in CloudFlare" href="javascript:void(0);" onclick="wpss_ip_action(\''.$ip.'\',\''.$ip_country.'\',\'wl\',\''. wp_create_nonce( 'wpss_ip_nonce' ).'\','.$comment_ID.');" class="delete">WL</a></span>';

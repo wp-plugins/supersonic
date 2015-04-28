@@ -3,8 +3,8 @@ Contributors: kursorA
 Donate link: 
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
-Tested up to: 4.1
-Stable tag: 1.0.14
+Tested up to: 4.2
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,9 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 8. Comment list
 
 == Changelog ==
+
+= 1.1.0 =
+* Wordpress 4.2 compatibility
 
 = 1.0.15 =
 * New log message for purge error in wp-cron

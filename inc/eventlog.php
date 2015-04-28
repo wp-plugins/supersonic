@@ -97,7 +97,7 @@ class WPSS_Log_List_Table extends WP_List_Table {
 		if (isset($wpss_countries[$ip_country])) {
 			$c = $wpss_countries[$ip_country].' ('.$ip_country.')';
 			$ret = "<a href='?page=wpss&tab=log&where=ip_country&where_value=".$ip_country."'>".$c."</a>";
-			$ret .= '<br/><img style="margin-top:5px;" src="'.plugins_url().'/supersonic/flags/'.strtolower($ip_country).'.png"/>';
+			$ret .= '<br/><img style="margin-top:5px;" src="'.plugins_url('/supersonic/flags/').strtolower($ip_country).'.png"/>';
 			$ret .= '<div class="row-actions"><strong>IP</strong>: <span class="delete">';
 			$ret .= '<a title="Ban IP in CloudFlare" href="javascript:void(0);" onclick="wpss_ip_action(\''.$ip.'\',\''.$ip_country.'\',\'ban\',\''. wp_create_nonce( 'wpss_ip_nonce' ).'\','.$id.',\'log\');" class="delete">BAN</a></span>';
 			$ret .= '<span> | <a title="White list IP in CloudFlare" href="javascript:void(0);" onclick="wpss_ip_action(\''.$ip.'\',\''.$ip_country.'\',\'wl\',\''. wp_create_nonce( 'wpss_ip_nonce' ).'\','.$id.',\'log\');" class="delete">WL</a></span>';
