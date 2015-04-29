@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: kursorA
-Donate link: 
+Donate link: http://www.wp-supersonic.com/donate-supersonic
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.2
