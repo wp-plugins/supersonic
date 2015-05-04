@@ -163,7 +163,7 @@ function wpss_login_message() {
 				}
 			}
 		}		
-		$message = 'Remaining login attemps: '.$attempts;
+		$message = '<p class="message">'.'Remaining login attemps: '.$attempts.'</p><br/>';
 		return $message;
 	}
 	else {

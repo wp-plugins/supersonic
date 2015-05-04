@@ -198,15 +198,18 @@ function wpss_wp_get_current_commenter($commenter) {
 add_filter('wp_get_current_commenter','wpss_wp_get_current_commenter',100,1);
 
 function wpss_update($post, $comment = 0 ) {
+	error_log('wpss_update '.$post->ID);
 	global $wpdb;
 	$settings = get_option( "wpss_settings" );
 	$count_rows = 0;
 	$post_type = $post->post_type;
 	//
 	if (($comment == 0 && $settings['refresh'][$post_type.'_this']) || ($comment && $settings['comments']['comment_this'])) {
+		error_log('wpss_update t1');
 		$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'singular\' and id = '.$post->ID;
 		$rows = $wpdb->get_results($sql);
 		foreach ($rows as $row) {
+			error_log('wpss_update '.$row->url);
 			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 1));
 			$count_rows++;
 		}
@@ -292,6 +295,7 @@ function wpss_update($post, $comment = 0 ) {
 	if ($count_rows) {
 		$sql = 'delete from '.$wpdb->prefix.'wpss_links where url in (select url from '.$wpdb->prefix.'wpss_clear)';
 		$wpdb->query($sql);
-		wp_schedule_single_event( time(), 'wpss_clear' );
+		wpss_clear_f(10);
+		//wp_schedule_single_event( time()-60, 'wpss_clear' );
 	}
 }

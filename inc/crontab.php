@@ -4,7 +4,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 
-function wpss_clear_f() {
+function wpss_clear_f($max_count = 99) {
 	global $wpdb;
 	$count_row = 0;
 	$settings = get_option( "wpss_settings" );
@@ -12,7 +12,7 @@ function wpss_clear_f() {
 	$sql = 'select url from '.$wpdb->prefix.'wpss_clear order by priority';
 	$rows = $wpdb->get_results($sql);
 	foreach ($rows as $row) {
-		if ($count_row > 99) {
+		if ($count_row > $max_count) {
 			wp_schedule_single_event( time()+60, 'wpss_clear' );
 			return;
 		}

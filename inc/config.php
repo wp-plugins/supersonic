@@ -90,7 +90,7 @@ function wpss_config_handler() {
 		<div class="updated">
         <p><?php _e( 'Settings updated!', 'wpss' ); ?></p>
     </div>   	
-    <?
+    <?php
   }	
   else if ($_GET['testcf']) {
   	$settings = get_option( "wpss_settings" );
@@ -106,14 +106,14 @@ function wpss_config_handler() {
 			<div class="error">
     	    <p><?php _e( 'CloudFlare test not passed! '.$msg, 'wpss' ); ?></p>
     	</div>   	
-    	<?
+    	<?php
 		}
 		else {
 	   	?>
 			<div class="updated">
     	    <p><?php _e( 'CloudFlare test passed.', 'wpss' ); ?></p>
     	</div>   	
-    	<?
+    	<?php
 		}		
   }
   else if ($_GET['tab'] == 'tools') {
