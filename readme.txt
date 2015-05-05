@@ -63,6 +63,9 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 
 == Changelog ==
 
+= 1.1.2 =
+* Added support for post preview
+
 = 1.1.1 =
 * Initiate first purge immediately without cron
 

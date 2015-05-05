@@ -181,6 +181,9 @@ function wpss_determine_current_user($user_ID) {
 				return $user_ID;
 			}
 		}
+		if ($_GET['preview'] == 'true') {
+			return $user_ID;
+		}
 		return false;
 	}
 	else {
@@ -294,8 +297,7 @@ function wpss_update($post, $comment = 0 ) {
 	}
 	if ($count_rows) {
 		$sql = 'delete from '.$wpdb->prefix.'wpss_links where url in (select url from '.$wpdb->prefix.'wpss_clear)';
-		$wpdb->query($sql);
-		wpss_clear_f(10);
-		//wp_schedule_single_event( time()-60, 'wpss_clear' );
+		$wpdb->query($sql);		
 	}
+	wpss_clear_f(5);
 }

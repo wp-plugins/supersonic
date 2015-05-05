@@ -74,7 +74,7 @@ function wpss_config_handler() {
 	if ($to_clear->to_clear) {
 		?>
 			<div class="error">
-    	    <p><?php _e( 'There is <b>'.$to_clear->to_clear.'</b> pages in queue to purge from CloudFlare cache.', 'wpss' ); ?></p>
+    	    <p><?php _e( 'There are <b>'.$to_clear->to_clear.'</b> pages in queue to purge from CloudFlare cache.', 'wpss' ); ?></p>
     	</div>   			
     <?php
 	}
