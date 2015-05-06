@@ -190,7 +190,7 @@ function wpss_config_handler() {
 				<div class="error">
     	  	  <p><?php _e( 'CloudFlare error: <b>'.$msg.'</b>', 'wpss' ); ?></p>
     		</div>   	
-    		<?
+    		<?php
 			}
 			else {
 				$table_name = $wpdb->prefix . 'wpss_links';
@@ -201,7 +201,7 @@ function wpss_config_handler() {
 				<div class="updated">
     	  	  <p><?php _e( 'CloudFlare cache purged.', 'wpss' ); ?></p>
     		</div>   	
-    		<?
+    		<?php
 			}		
   	}
   	else if ($_GET['wpss_action'] == 'clear_cached') {
@@ -299,20 +299,20 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
         <tr>
         	<th><label for="wpss_cloudflare_login">Cloudflare login:</label></th>
             <td>
-               <input style="width:340px;" id="wpss_cloudflare_login" name="wpss_cloudflare_login" type="email" value="<? echo $settings['cloudflare_login']; ?>" /><br/>
+               <input style="width:340px;" id="wpss_cloudflare_login" name="wpss_cloudflare_login" type="email" value="<?php echo $settings['cloudflare_login']; ?>" /><br/>
             </td>
         </tr>
         <tr>
         	<th><label for="wpss_cloudflare_api_key">Cloudflare API key:</label></th>
             <td>
-               <input style="width:340px;" id="wpss_cloudflare_api_key" name="wpss_cloudflare_api_key" type="text" value="<? echo $settings['cloudflare_api_key']; ?>" /><br/>
+               <input style="width:340px;" id="wpss_cloudflare_api_key" name="wpss_cloudflare_api_key" type="text" value="<?php echo $settings['cloudflare_api_key']; ?>" /><br/>
                <span class="description">CloudFlare API key You can find <a href="https://www.cloudflare.com/my-account">here</a>.</span>               
             </td>
         </tr>
         <tr>
         	<th><label for="wpss_cloudflare_api_key">Cloudflare domain:</label></th>
             <td>
-               <input style="width:340px;" id="wpss_cloudflare_domain" name="wpss_cloudflare_domain" type="text" value="<? echo $settings['cloudflare_domain']; ?>" /><br/>
+               <input style="width:340px;" id="wpss_cloudflare_domain" name="wpss_cloudflare_domain" type="text" value="<?php echo $settings['cloudflare_domain']; ?>" /><br/>
                <span class="description">Domain must be added and activated on Your CloudFlare account.</span>                              
             </td>
         </tr>
@@ -329,7 +329,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
         <tr>
         	<th><label for="wpss_donotlogout">Do not logout:</label></th>
             <td>
-            	<textarea style="width:340px;height:100px;" id="wpss_donotlogout" name="wpss_donotlogout" ><? echo $settings['donotlogout']; ?></textarea><br/>
+            	<textarea style="width:340px;height:100px;" id="wpss_donotlogout" name="wpss_donotlogout" ><?php echo $settings['donotlogout']; ?></textarea><br/>
             	<span class="description">
             		By default SuperSonic serves all Wordpress front end pages as for non logged in users. Here you can define paths for pages to disable this future.<br/>
             		You can use widcard *. Ex: /user-area*. One URL per line. Use only relative path to site URL, ex: /path.<br/>
@@ -340,7 +340,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
         <tr>
         	<th><label for="wpss_add_clear">Additional URLs to clear:</label></th>
             <td>
-            	<textarea style="width:340px;height:100px;" id="wpss_add_clear" name="wpss_add_clear" ><? echo $settings['add_clear']; ?></textarea><br/>
+            	<textarea style="width:340px;height:100px;" id="wpss_add_clear" name="wpss_add_clear" ><?php echo $settings['add_clear']; ?></textarea><br/>
             	<span class="description">
             		Define URLs to clear from CloudFlare cache on every event (every post types or comments are created, edited, deleted.)
             		You can use widcard *. Ex: /sitemap*. One URL per line. Use only relative path to site URL, ex: /path.<br/>

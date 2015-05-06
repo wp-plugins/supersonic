@@ -3,7 +3,7 @@
 Plugin Name: Wordpress SuperSonic with CloudFlare
 Plugin URI: https://wordpress.org/plugins/supersonic/
 Description: Takes Wordpress to Supersonic speed with CloudFlare
-Version: 1.1.2
+Version: 1.1.3
 Author: Grzegorz Rola
 Author URI: http://www.wp-supersonic.com
 Text Domain: wpss

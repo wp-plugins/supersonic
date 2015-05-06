@@ -4,7 +4,7 @@ Donate link: http://www.wp-supersonic.com/donate-supersonic
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.1.1
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,9 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 8. Comment list
 
 == Changelog ==
+
+= 1.1.3 =
+* Short opening tags (<?) changed to PHP opening tags (<?php)
 
 = 1.1.2 =
 * Added support for post preview
