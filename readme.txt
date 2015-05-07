@@ -47,11 +47,11 @@ Wordpress SuperSonic with CloudFlare integrates Wordpress with CloudFlare for mo
 
 = CloudFlare is required? =
 
-Yes. Without CloudFlare SuperSonic functions will not works.
+**Yes**. Without CloudFlare SuperSonic functions will not works.
 
 = Which Page Rules should You define in CloudFlare? =
 
-To properly working Supersonic requires at least 3 Page Rules in CloudFlare.
+To properly working Supersonic requires **at least 3 Page Rules** in CloudFlare.
 
 1. URL pattern: /*.php* 
    Custom caching: Bypass cache 
