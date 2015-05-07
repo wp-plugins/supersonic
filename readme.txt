@@ -68,7 +68,7 @@ Supersonic serves front end pages as for non logged in users (except pages that 
 But for users with specified roles there is posibility to serve non cached pages. It is done by adding parameter (supersonic=wp-admin) to all frontend URLs.
 
 CloudFlare should not cache pages with this parameter. There must be PageRule with Custom caching: Bypass cache.
-If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change URL pattern to /*wp-admin.
+If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change URL pattern to /\*wp-admin\*.
 
 
 == Screenshots ==
