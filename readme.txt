@@ -86,6 +86,9 @@ If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change UR
 
 == Changelog ==
 
+= 1.2.3 =
+* Added dirname(__FILE__) in include_once
+
 = 1.2.1 =
 * Fixed Call to undefined function is_user_logged_in
 

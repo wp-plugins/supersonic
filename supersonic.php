@@ -3,27 +3,27 @@
 Plugin Name: Wordpress SuperSonic with CloudFlare
 Plugin URI: https://wordpress.org/plugins/supersonic/
 Description: Takes Wordpress to Supersonic speed with CloudFlare
-Version: 1.2.1
+Version: 1.2.3
 Author: Grzegorz Rola
 Author URI: http://www.wp-supersonic.com
 Text Domain: wpss
 */ 
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (!defined('ABSPATH')) exit;
 
-include_once('inc/actions.php');
-include_once('inc/countries.php');
-include_once('inc/security.php');
-include_once('inc/comments.php');
-include_once('inc/config.php');
-include_once('inc/statistics.php');
-include_once('inc/crontab.php');
-include_once('inc/eventlog.php');
-include_once('inc/class_cloudflare.php');
+include_once(dirname(__FILE__).'/inc/actions.php');
+include_once(dirname(__FILE__).'/inc/countries.php');
+include_once(dirname(__FILE__).'/inc/security.php');
+include_once(dirname(__FILE__).'/inc/comments.php');
+include_once(dirname(__FILE__).'/inc/config.php');
+include_once(dirname(__FILE__).'/inc/statistics.php');
+include_once(dirname(__FILE__).'/inc/crontab.php');
+include_once(dirname(__FILE__).'/inc/eventlog.php');
+include_once(dirname(__FILE__).'/inc/class_cloudflare.php');
 
 
-$wpss_db_version = '1.1.3';
+$wpss_db_version = '1.2.3';
 
 
 function wpss_install() {
@@ -81,6 +81,18 @@ function wpss_install() {
 		wp_schedule_event( time(), 'hourly', 'wpss_log_clear' );
 	}	
 	add_option( 'wpss_stats', array(), '', 'no' );
+	//
+/*	
+	$settings = get_option('wpss_settings');
+	if (!isset($settings['check_cf_ray'])) {
+		$settings['check_cf_ray'] = '1';
+		$updated = update_option( "wpss_settings", $settings );
+	}
+	if (!isset($settings['log_cache'])) {
+		$settings['log_cache'] = '0';
+		$updated = update_option( "wpss_settings", $settings );
+	}
+*/	
 }
 register_activation_hook( __FILE__, 'wpss_install' );
 

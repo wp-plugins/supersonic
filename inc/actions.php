@@ -3,7 +3,6 @@
 // Exit if accessed directly
 if (!defined( 'ABSPATH')) exit;
 
-
 function wpss_init() {
 	if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) && isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["HTTP_CF_CONNECTING_IP"] != $_SERVER["REMOTE_ADDR"]) {
 		$_SERVER["REMOTE_ADDR"] = $_SERVER["HTTP_CF_CONNECTING_IP"];
@@ -11,7 +10,7 @@ function wpss_init() {
 	}
 	if (!headers_sent()) {
 		header('X-WPSS-Powered-By: WP SuperSonic');
-	} 		
+	}
 }
 add_action('init', 'wpss_init',1);
 
@@ -40,14 +39,15 @@ if( !function_exists('apache_request_headers') ) {
 
 
 function wpss_footer() {	
+	//error_log('footer');
 	$settings = get_option('wpss_settings');
-	if ($settings['cloudflare_api_key'] && $_SERVER['HTTP_CF_RAY']) {
+	if ($settings['cloudflare_api_key'] && (/*$settings['check_cf_ray'] == '0' || */$_SERVER['HTTP_CF_RAY'])) {
 		global $wpdb, $wp_query;
 		$type = 'other';
 		$type2 = 'other';
 		$id = 0;	
 		$url = $_SERVER["REQUEST_URI"];
-		$proto = $_SERVER['HTTP_X_FORWARDED_PROTO'];		
+		$proto = $_SERVER['HTTP_X_FORWARDED_PROTO'];
 		$host = $_SERVER['HTTP_HOST'];
 		$url2 = $proto.'://'.$host;
 		if ($url2 == site_url()) {

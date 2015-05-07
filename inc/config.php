@@ -28,6 +28,12 @@ function wpss_save_config() {
   	$settings['donotlogout_roles'] = $_POST['wpss_donotlogout_roles'];
   	$settings['donotlogout'] = $_POST['wpss_donotlogout'];
   	$settings['add_clear'] = $_POST['wpss_add_clear'];
+/*
+  	$settings['check_cf_ray'] = 0;
+  	if ($_POST['wpss_check_cf_ray'] == '1') {
+  		$settings['check_cf_ray'] = $_POST['wpss_check_cf_ray'];
+  	}
+*/  	
   	$settings['start_immediatly'] = 0;
   	if ($_POST['wpss_start_immediatly'] == '1') {
   		$settings['start_immediatly'] = $_POST['wpss_start_immediatly'];
@@ -36,6 +42,12 @@ function wpss_save_config() {
   	if ($_POST['wpss_event_log'] == '1') {
   		$settings['event_log'] = $_POST['wpss_event_log'];
   	}
+/*  	
+  	$settings['log_cache'] = 0;
+  	if ($_POST['wpss_log_cache'] == '1') {
+  		$settings['log_cache'] = $_POST['wpss_log_cache'];
+  	}
+*/  	
   	$settings['event_log_clear'] = $_POST['wpss_event_log_clear'];
   }
   if ($tab == 'post_types') {
@@ -384,6 +396,18 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
             	</span>                              
             </td>
         </tr>
+<?php /*
+        <tr>
+        	<th><label for="wpss_check_cf_ray">Check HTTP_CF_RAY header</label></th>
+            <td>
+            	<input id="wpss_check_cf_ray" name="wpss_check_cf_ray" type="checkbox" value="1" <?php echo ($settings['check_cf_ray']=='1')?'checked':''; ?>>
+            	<br/><br/>
+            	<span class="description">            		
+            		Check HTTP_CF_RAY header to detect CloudFlare requests.
+            	</span>                              
+            </td>
+        </tr>
+*/ ?>        
         <tr>
         	<th><label for="wpss_event_log">Enable event logging</label></th>
             <td>
@@ -392,6 +416,17 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
             	</span>                              
             </td>
         </tr>
+<?php /*        
+        <tr>
+        	<th><label for="wpss_log_cache">Log cache events</label></th>
+            <td>
+            	<input id="wpss_log_cache" name="wpss_log_cache" type="checkbox" value="1" <?php echo ($settings['log_cache']=='1')?'checked':''; ?>>
+            	<br/><span class="description">            		
+            		Log all cache events. For debugging only!
+            	</span>                              
+            </td>
+        </tr>
+*/ ?>        
 				<tr>
 					<th>
 						<label style="vertical-align:top;" for="wpss_event_log_clear">Delete log entries older than</label> 
