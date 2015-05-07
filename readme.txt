@@ -53,14 +53,16 @@ Wordpress SuperSonic with CloudFlare integrates Wordpress with CloudFlare for mo
 
 To properly working Supersonic requires **at least 3 Page Rules** in CloudFlare.
 
-1. URL pattern: /*.php* 
+1. URL pattern: /\*.php\* 
    Custom caching: Bypass cache 
 2. URL pattern: /\*wp-admin\*
    Custom caching: Bypass cache
-3. URL pattern: /*
+3. URL pattern: /\*
    Custom caching: Cache everything
    Edge cache expire TTL: 1 week
    Browser cache expire TTL: 30 minutes
+
+**Rules order is very important!**
    
 = How to configure Supersonic to serve non cached pages with Admin Bar for logged in users? =
 
