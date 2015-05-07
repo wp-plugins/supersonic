@@ -52,12 +52,11 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 = Which Page Rules should You define in CloudFlare? =
 
 To properly working Supersonic requires at least 3 Page Rules in CloudFlare.
+
 1. URL pattern: /*.php* 
+   Custom caching: Bypass cache 
+2. URL pattern: /\*wp-admin\*
    Custom caching: Bypass cache
-
-2. URL pattern: /*wp-admin*
-   Custom caching: Bypass cache
-
 3. URL pattern: /*
    Custom caching: Cache everything
    Edge cache expire TTL: 1 week
