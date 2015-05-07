@@ -109,19 +109,15 @@ function wpss_comments_head() {
 add_action('admin_head', 'wpss_comments_head');
 
 function wpss_set_comment_status($id, $status) {
-	error_log('wpss_set_comment_status');
 	if ($status == 'spam') {
-		error_log('wpss_set_comment_status 1');
 		$comment = get_comment($id);
 		if ($comment) {
 			$settings = get_option( "wpss_settings" );
-			error_log('wpss_set_comment_status 2');
 			$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);			
 			$ret = $cf->spam($comment->comment_author, $comment->comment_author_email, $comment->comment_author_IP, substr($comment->comment_content, 0, 200));
 			if ($ret->result == 'success') {
 				$ip_country = get_comment_meta( $id, 'ipcountry' , true );
 				wpss_log(10,'',$comment->comment_author_IP,$ip_country);
-				error_log('wpss_set_comment_status');
 			}
 			else {
 				wpss_log(10,'CloudFlare error: '.$ret->msg.serialize($ret),$comment->comment_author_IP,$ip_country);

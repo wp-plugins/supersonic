@@ -40,16 +40,6 @@ if( !function_exists('apache_request_headers') ) {
 
 
 function wpss_footer() {	
-	/* 
-	error_log(serialize(apache_request_headers()));
-	foreach ($_SERVER as $k => $v) {
-		error_log($k.' = '.$v);
-	}
-	foreach ($_REQUEST as $k => $v) {
-		error_log($k.' = '.$v);
-	}
-	error_log($_SERVER['HTTP_CF_IPCOUNTRY']);
-	/* */
 	$settings = get_option('wpss_settings');
 	if ($settings['cloudflare_api_key'] && $_SERVER['HTTP_CF_RAY']) {
 		global $wpdb, $wp_query;
@@ -135,7 +125,8 @@ function wpss_footer() {
 				$type = 'search';
 			}
 			//
-			$wpdb->insert($table_name,array('url' => $url, 'type' => $type, 'type2' => $type2, 'id' => $id));
+			//$wpdb->insert($table_name,array('url' => $url, 'type' => $type, 'type2' => $type2, 'id' => $id));
+			$wpdb->replace($table_name,array('url' => $url, 'type' => $type, 'type2' => $type2, 'id' => $id));
 		}
 	}
 }
@@ -184,6 +175,9 @@ function wpss_determine_current_user($user_ID) {
 		if ($_GET['preview'] == 'true') {
 			return $user_ID;
 		}
+		if ($_REQUEST['supersonic'] == untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))) {
+			return $user_ID;
+		}
 		return false;
 	}
 	else {
@@ -191,6 +185,30 @@ function wpss_determine_current_user($user_ID) {
 	}
 }
 add_filter('determine_current_user','wpss_determine_current_user',1000);
+
+function wpss_home_url($url, $path, $orig_scheme, $blog_id) {
+	if (is_user_logged_in()) {
+		$settings = get_option('wpss_settings');
+		if (count($settings['donotlogout_roles'])) {
+			global $current_user;
+			$user_roles = $current_user->roles;
+			foreach ($user_roles as $role) {				
+				if ($settings['donotlogout_roles'][$role] == '1') {
+					$url = add_query_arg(array('supersonic' => untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))),$url);
+					break;
+				}
+			}						
+		}		
+	}	
+	return $url;
+}
+add_filter('home_url','wpss_home_url',10,4);
+
+function wpss_robots_txt( $output, $public ) {
+	$output .= "Disallow: /*?*supersonic=\n";
+	return $output;
+}
+add_filter( 'robots_txt', 'wpss_robots_txt', 10, 2 );
 
 function wpss_wp_get_current_commenter($commenter) {
 	$commenter['comment_author'] = '';
@@ -201,19 +219,16 @@ function wpss_wp_get_current_commenter($commenter) {
 add_filter('wp_get_current_commenter','wpss_wp_get_current_commenter',100,1);
 
 function wpss_update($post, $comment = 0 ) {
-	error_log('wpss_update '.$post->ID);
 	global $wpdb;
 	$settings = get_option( "wpss_settings" );
 	$count_rows = 0;
 	$post_type = $post->post_type;
 	//
 	if (($comment == 0 && $settings['refresh'][$post_type.'_this']) || ($comment && $settings['comments']['comment_this'])) {
-		error_log('wpss_update t1');
 		$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'singular\' and id = '.$post->ID;
 		$rows = $wpdb->get_results($sql);
 		foreach ($rows as $row) {
-			error_log('wpss_update '.$row->url);
-			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 1));
+			$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 1));
 			$count_rows++;
 		}
 	}
@@ -221,7 +236,7 @@ function wpss_update($post, $comment = 0 ) {
 		$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'home\'';
 		$rows = $wpdb->get_results($sql);
 		foreach ($rows as $row) {
-			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 2));
+			$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 2));
 			$count_rows++;
 		}
 	}
@@ -233,7 +248,7 @@ function wpss_update($post, $comment = 0 ) {
 				$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'tax\' and id = '.$term->term_id;
 				$rows = $wpdb->get_results($sql);
 				foreach ($rows as $row) {
-					$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 3));
+					$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 3));
 					$count_rows++;
 				}
 				if ($term->parent) {
@@ -249,7 +264,7 @@ function wpss_update($post, $comment = 0 ) {
 		$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'author\' and id = '.$post->post_author;
 		$rows = $wpdb->get_results($sql);
 		foreach ($rows as $row) {
-			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 4));
+			$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 4));
 			$count_rows++;
 		}		
 	}
@@ -258,7 +273,7 @@ function wpss_update($post, $comment = 0 ) {
 		$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'author\' and id in ('.$id_in.')';
 		$rows = $wpdb->get_results($sql);
 		foreach ($rows as $row) {
-			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 5));
+			$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 5));
 			$count_rows++;
 		}		
 	}
@@ -266,7 +281,7 @@ function wpss_update($post, $comment = 0 ) {
 		$sql = 'select url from '.$wpdb->prefix.'wpss_links where type = \'other\'';
 		$rows = $wpdb->get_results($sql);
 		foreach ($rows as $row) {
-			$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
+			$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
 			$count_rows++;
 		}
 	}
@@ -278,7 +293,7 @@ function wpss_update($post, $comment = 0 ) {
 			$sql = 'select url from '.$wpdb->prefix.'wpss_links where url like \''.$url.'\'';
 			$rows = $wpdb->get_results($sql);
 			foreach ($rows as $row) {
-				$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
+				$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
 				$count_rows++;
 			}
 		}
@@ -290,7 +305,7 @@ function wpss_update($post, $comment = 0 ) {
 			$sql = 'select url from '.$wpdb->prefix.'wpss_links where url like \''.$url.'\'';
 			$rows = $wpdb->get_results($sql);
 			foreach ($rows as $row) {
-				$wpdb->insert($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
+				$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
 				$count_rows++;
 			}
 		}
@@ -299,5 +314,10 @@ function wpss_update($post, $comment = 0 ) {
 		$sql = 'delete from '.$wpdb->prefix.'wpss_links where url in (select url from '.$wpdb->prefix.'wpss_clear)';
 		$wpdb->query($sql);		
 	}
-	wpss_clear_f(5);
+	if ($settings['start_immediatly'] == '1') {
+		wpss_clear_f();
+	}
+	else {
+		wp_schedule_single_event( time()-60, 'wpss_clear' );
+	}
 }

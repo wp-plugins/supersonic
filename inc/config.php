@@ -25,8 +25,13 @@ function wpss_save_config() {
   	$settings['cloudflare_domain'] = $_POST['wpss_cloudflare_domain'];
   }
   if ($tab == 'options') {
+  	$settings['donotlogout_roles'] = $_POST['wpss_donotlogout_roles'];
   	$settings['donotlogout'] = $_POST['wpss_donotlogout'];
   	$settings['add_clear'] = $_POST['wpss_add_clear'];
+  	$settings['start_immediatly'] = 0;
+  	if ($_POST['wpss_start_immediatly'] == '1') {
+  		$settings['start_immediatly'] = $_POST['wpss_start_immediatly'];
+  	}
   	$settings['event_log'] = 0;
   	if ($_POST['wpss_event_log'] == '1') {
   		$settings['event_log'] = $_POST['wpss_event_log'];
@@ -327,13 +332,35 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 				echo '<table class="form-table">';
 				?>
         <tr>
-        	<th><label for="wpss_donotlogout">Do not logout:</label></th>
+        	<th><label for="wpss_donotlogout">Do not logout on URLs:</label></th>
             <td>
             	<textarea style="width:340px;height:100px;" id="wpss_donotlogout" name="wpss_donotlogout" ><?php echo $settings['donotlogout']; ?></textarea><br/>
             	<span class="description">
             		By default SuperSonic serves all Wordpress front end pages as for non logged in users. Here you can define paths for pages to disable this future.<br/>
             		You can use widcard *. Ex: /user-area*. One URL per line. Use only relative path to site URL, ex: /path.<br/>
-            		<strong>In CloudFlare page rules You must define page rule for thise URLs with Custom caching <font color="red">Bypass cache</font>.</strong>
+            		<strong>In CloudFlare page rules You must define page rule for these URLs with Custom caching <font color="red">Bypass cache</font>.</strong>
+            	</span>                              
+            </td>
+        </tr>
+        <tr>
+        	<th><label for="wpss_donotlogout_roles">Do not logout user roles:</label></th>
+            <td>
+            	<?php
+            		global $wp_roles;
+            		foreach ($wp_roles->roles as $role) {
+            			echo "<input value='1' type='checkbox' name='wpss_donotlogout_roles[".strtolower($role['name'])."]' id='wpss_donotlogout_roles[".strtolower($role['name'])."]' ".
+            					(($settings['donotlogout_roles'][strtolower($role['name'])]=='1')?'checked':'').
+            					"><label for='wpss_donotlogout_roles[".strtolower($role['name'])."]'>".$role['name']."</label>&nbsp; ";
+            		}
+            	?>
+            	<br/><br/>
+            	<span class="description">
+            		Do not logout specified user roles. It is done by adding <i>supersonic</i> parameter to all front end pages with value <i>wp-admin</i>.<br/>
+            		<strong>
+            			In CloudFlare page rules You must have rule with <i>URL pattern: /*wp-admin*</i> <font color="red">Bypass cache</font>.<br/>
+            			If You have rule with URL pattern: <i>/wp-admin*</i> or <i>/wp-admin/*</i> You can change it to: <i>/*wp-admin*</i>.<br/>
+            			This rule must be before Cache everything rule.
+            		</strong>
             	</span>                              
             </td>
         </tr>
@@ -344,6 +371,16 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
             	<span class="description">
             		Define URLs to clear from CloudFlare cache on every event (every post types or comments are created, edited, deleted.)
             		You can use widcard *. Ex: /sitemap*. One URL per line. Use only relative path to site URL, ex: /path.<br/>
+            	</span>                              
+            </td>
+        </tr>
+        <tr>
+        	<th><label for="wpss_start_immediatly">Purge immediatly</label></th>
+            <td>
+            	<input id="wpss_start_immediatly" name="wpss_start_immediatly" type="checkbox" value="1" <?php echo ($settings['start_immediatly']=='1')?'checked':''; ?>>
+            	<br/><br/>
+            	<span class="description">            		
+            		Starts purging URLs from CloudFlare cache immediatly, without waiting for wp-cron.
             	</span>                              
             </td>
         </tr>
@@ -883,7 +920,7 @@ If you want to cache all content including posts, pages, categories, tags, etc. 
 <ol>
 	<li>URL pattern: /*.php*
 Custom caching: Bypass cache</li>
-	<li>URL pattern: /wp-admin*
+	<li>URL pattern: /*wp-admin*
 Custom caching: Bypass cache</li>
 	<li>URL pattern: /*
 Custom caching: Cache everything

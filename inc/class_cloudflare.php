@@ -593,7 +593,6 @@ class cloudflare_api
 				$url .= "&u=".$this->email;
 				$url .= "&tkn=".$this->token_key;
 				$url .= "&event_t=";
-				error_log($url);
 				$response = wp_remote_get( $url, array(
 					'method' => 'GET',
 					'timeout' => self::TIMEOUT,
@@ -605,7 +604,6 @@ class cloudflare_api
 					'cookies' => array()
     			)
 				);
-				error_log(serialize($response));
 			}
 			else {
 				$response = wp_remote_post( self::$URL[$type], array(

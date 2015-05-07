@@ -4,7 +4,7 @@ Donate link: http://www.wp-supersonic.com/donate-supersonic
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.1.3
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,26 @@ Wordpress SuperSonic with CloudFlare integrates Wordpress with CloudFlare for mo
 
 Yes. Without CloudFlare SuperSonic functions will not works.
 
+= Which Page Rules should You define in CloudFlare? =
+
+To properly working Supersonic requires at least 3 Page Rules in CloudFlare.
+1. URL pattern: /*.php* 
+   Custom caching: Bypass cache
+1. URL pattern: /*wp-admin*
+   Custom caching: Bypass cache
+1. URL pattern: /*
+   Custom caching: Cache everything
+   Edge cache expire TTL: 1 week
+   Browser cache expire TTL: 30 minutes
+   
+= How to configure Supersonic to serve non cached pages with Admin Bar for logged in users? =
+
+Supersonic serves front end pages as for non logged in users (except pages that are defined in options).
+But for users with specified roles there is posibility to serve non cached pages. It is done by adding parameter (supersonic=wp-admin) to all frontend URLs.
+
+CloudFlare should not cache pages with this parameter. There must be PageRule with Custom caching: Bypass cache.
+If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change URL pattern to /*wp-admin.
+
 
 == Screenshots ==
 
@@ -62,6 +82,10 @@ Yes. Without CloudFlare SuperSonic functions will not works.
 8. Comment list
 
 == Changelog ==
+
+= 1.2.0 =
+* Added configuration option for start purging CloudFlare cache without waiting for wp-cron (in Options tab)
+* Added functionality to serve non cached pages for logged in users with specified role(s), this functionality is bit tricky - see FAQ
 
 = 1.1.3 =
 * Short opening tags (<?) changed to PHP opening tags (<?php)
