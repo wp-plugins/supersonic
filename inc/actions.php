@@ -187,7 +187,7 @@ function wpss_determine_current_user($user_ID) {
 add_filter('determine_current_user','wpss_determine_current_user',1000);
 
 function wpss_home_url($url, $path, $orig_scheme, $blog_id) {
-	if (is_user_logged_in()) {
+	if (function_exists('is_user_logged_in') && is_user_logged_in()) {
 		$settings = get_option('wpss_settings');
 		if (count($settings['donotlogout_roles'])) {
 			global $current_user;

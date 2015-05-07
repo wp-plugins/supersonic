@@ -4,7 +4,7 @@ Donate link: http://www.wp-supersonic.com/donate-supersonic
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,7 +68,7 @@ Supersonic serves front end pages as for non logged in users (except pages that 
 But for users with specified roles there is posibility to serve non cached pages. It is done by adding parameter (supersonic=wp-admin) to all frontend URLs.
 
 CloudFlare should not cache pages with this parameter. There must be PageRule with Custom caching: Bypass cache.
-If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change URL pattern to /\*wp-admin\*.
+If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change URL pattern to /\*wp-admin\*
 
 
 == Screenshots ==
@@ -83,6 +83,9 @@ If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change UR
 8. Comment list
 
 == Changelog ==
+
+= 1.2.1 =
+* Fixed Call to undefined function is_user_logged_in
 
 = 1.2.0 =
 * Added configuration option for start purging CloudFlare cache without waiting for wp-cron (in Options tab)
