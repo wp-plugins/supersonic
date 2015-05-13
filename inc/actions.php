@@ -152,11 +152,11 @@ add_action('wp_set_comment_status','wpss_save_comment',10,2);
 add_action('edit_comment','wpss_save_comment',10,2);
 
 function wpss_comment_post($comment_id,$comment_approved) {	
-	if ($comment_approved == '1') {
+	//if ($comment_approved == '1') {
 		$comment = get_comment($comment_id);
 		$post = get_post($comment->comment_post_ID);
 		wpss_update($post, 1);
-	}
+	//}
 }
 add_action('comment_post','wpss_comment_post',10,2);
 
@@ -301,12 +301,17 @@ function wpss_update($post, $comment = 0 ) {
 	if ($settings['add_clear']) {
 		$add_clear = explode("\n",$settings['add_clear']);
 		foreach ($add_clear as $url) {
-			$url = str_replace('*','%',$url);
-			$sql = 'select url from '.$wpdb->prefix.'wpss_links where url like \''.$url.'\'';
-			$rows = $wpdb->get_results($sql);
-			foreach ($rows as $row) {
-				$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
-				$count_rows++;
+			if (strpos($url,'*') !== false) {
+				$url = str_replace('*','%',$url);
+				$sql = 'select url from '.$wpdb->prefix.'wpss_links where url like \''.$url.'\'';
+				$rows = $wpdb->get_results($sql);
+				foreach ($rows as $row) {
+					$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 100));
+					$count_rows++;
+				}
+			}
+			else {
+				$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $url, 'priority' => 1));
 			}
 		}
 	}
