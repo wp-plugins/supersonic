@@ -22,7 +22,7 @@ function wpss_clear_f($max_count = 99) {
 			$url = site_url().$url;
 		}
 		if (trim($url) == '') {
-			$url = site_url();
+			$url = trailingslashit(site_url());
 		}
 		$ret = $cf->zone_file_purge($settings['cloudflare_domain'],$url);		
 		//error_log('purge url='.$url);
