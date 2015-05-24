@@ -86,6 +86,10 @@ If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change UR
 
 == Changelog ==
 
+= 1.2.5 =
+* Optimizations in collecting URLs to clear
+* Bug fixed in home page identyfication
+
 = 1.2.4 =
 * Optimization in "Additional URLs to clear"	
 

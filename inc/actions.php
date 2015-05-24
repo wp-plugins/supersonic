@@ -39,9 +39,25 @@ if( !function_exists('apache_request_headers') ) {
 
 
 function wpss_footer() {	
-	//error_log('footer');
 	$settings = get_option('wpss_settings');
 	if ($settings['cloudflare_api_key'] && (/*$settings['check_cf_ray'] == '0' || */$_SERVER['HTTP_CF_RAY'])) {
+		if (!is_admin()) {
+			$donotlogout_s = $settings['donotlogout'];
+			$donotlogout = explode("\n",$donotlogout_s);
+			foreach ($donotlogout as $url) {
+				$url = trim($url);
+				if (fnmatch($url,$_SERVER["REQUEST_URI"])) {
+					return;
+				}
+			}
+			if ($_GET['preview'] == 'true') {
+				return;
+			}
+			if ($_REQUEST['supersonic'] == untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))) {
+				return;
+			}
+		}
+		//
 		global $wpdb, $wp_query;
 		$type = 'other';
 		$type2 = 'other';
@@ -61,11 +77,11 @@ function wpss_footer() {
 		$sql = "select * from ".$table_name." where url = '$url'";
 		$row = $wpdb->get_row($sql);
 		if ($row == null) {
-			if (is_home()) {
+			if (is_home() || is_front_page()) {
 				$type = 'home';
 				$type2 = 'home';
 			}
-			if (is_singular()) {
+			else if (is_singular()) {
 				$type = 'singular';
 				if (is_singular('post')) {
 					$type2 = 'post';
