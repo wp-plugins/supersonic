@@ -4,7 +4,7 @@ Donate link: http://www.wp-supersonic.com/donate-supersonic
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
