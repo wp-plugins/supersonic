@@ -20,7 +20,7 @@ add_filter( 'manage_edit-comments_columns', 'wpss_comment_columns' );
 function wpss_comment_column( $column, $comment_ID ) {
 	if ( 'ipcountry' == $column ) {
 		if ( $meta = get_comment_meta( $comment_ID, $column , true ) ) {
-			global $wpss_countries;
+			$wpss_countries = wpss_get_countries();
 			$comment = get_comment($comment_ID);
 			$ip = $comment->comment_author_IP;
 			$ip_country = $meta;

@@ -4,7 +4,7 @@ Donate link: http://www.wp-supersonic.com/donate-supersonic
 Tags: cloudflare, speed, cache, optimize, security, bruteforce, CDN, performance, spam, antispam
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change UR
 8. Comment list
 
 == Changelog ==
+
+= 1.2.6 =
+* Few optimizations in collecting URLs to clear
 
 = 1.2.5 =
 * Optimizations in collecting URLs to clear

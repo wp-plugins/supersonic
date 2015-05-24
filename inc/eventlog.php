@@ -89,7 +89,7 @@ class WPSS_Log_List_Table extends WP_List_Table {
 	}
 
 	function column_ip_country($item) {    	
-		global $wpss_countries;
+		$wpss_countries = wpss_get_countries();
 		$ip_country = $item['ip_country'];
 		$ip = $item['ip'];
 		$id = $item['id'];

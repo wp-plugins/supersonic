@@ -709,7 +709,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<label for="<?php echo $protection_name; ?>-selectfrom">Available</label><br/>
 							<select name="<?php echo $protection_name; ?>-selectfrom" id="<?php echo $protection_name; ?>-selectfrom" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
-								global $wpss_countries;
+								$wpss_countries = wpss_get_countries();
 								foreach ($wpss_countries as $code => $name) {
 									if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
 										echo '<option value="'.$code.'">'.$name.'</option>';
@@ -781,7 +781,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<label for="<?php echo $protection_name; ?>-selectfrom">Available</label><br/>
 							<select name="<?php echo $protection_name; ?>-selectfrom" id="<?php echo $protection_name; ?>-selectfrom" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
-								global $wpss_countries;
+								$wpss_countries = wpss_get_countries();
 								foreach ($wpss_countries as $code => $name) {
 									if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
 										echo '<option value="'.$code.'">'.$name.'</option>';
@@ -853,7 +853,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<label for="<?php echo $protection_name; ?>-selectfrom">Available</label><br/>
 							<select name="<?php echo $protection_name; ?>-selectfrom" id="<?php echo $protection_name; ?>-selectfrom" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
-								global $wpss_countries;
+								$wpss_countries = wpss_get_countries();
 								foreach ($wpss_countries as $code => $name) {
 									if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
 										echo '<option value="'.$code.'">'.$name.'</option>';

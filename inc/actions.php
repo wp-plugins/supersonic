@@ -37,23 +37,27 @@ if( !function_exists('apache_request_headers') ) {
 	}
 }
 
-
+$wpss_bypass = false;
 function wpss_footer() {	
+	/*
+	global $wpss_bypass;
+	if ($wpss_bypass) {
+		return;
+	}
+	*/
 	$settings = get_option('wpss_settings');
 	if ($settings['cloudflare_api_key'] && (/*$settings['check_cf_ray'] == '0' || */$_SERVER['HTTP_CF_RAY'])) {
-		if (!is_admin()) {
-			$donotlogout_s = $settings['donotlogout'];
-			$donotlogout = explode("\n",$donotlogout_s);
-			foreach ($donotlogout as $url) {
-				$url = trim($url);
-				if (fnmatch($url,$_SERVER["REQUEST_URI"])) {
-					return;
-				}
-			}
-			if ($_GET['preview'] == 'true') {
-				return;
-			}
-			if ($_REQUEST['supersonic'] == untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))) {
+		if ($_GET['preview'] == 'true') {
+			return;
+		}
+		if ($_REQUEST['supersonic'] == untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))) {
+			return;
+		}
+		$donotlogout_s = $settings['donotlogout'];
+		$donotlogout = explode("\n",$donotlogout_s);
+		foreach ($donotlogout as $url) {
+			$url = trim($url);
+			if (fnmatch($url,$_SERVER["REQUEST_URI"])) {
 				return;
 			}
 		}
@@ -75,31 +79,42 @@ function wpss_footer() {
 		$url = $url2;
 		$table_name = $wpdb->prefix . 'wpss_links';
 		$sql = "select * from ".$table_name." where url = '$url'";
-		$row = $wpdb->get_row($sql);
+		$row = null;
+		//$row = $wpdb->get_row($sql);
 		if ($row == null) {
-			if (is_home() || is_front_page()) {
+			if ($type == 'other' && (is_front_page() || is_home())) {
 				$type = 'home';
 				$type2 = 'home';
 			}
-			else if (is_singular()) {
+			if ($type == 'other' && is_singular()) {
 				$type = 'singular';
-				if (is_singular('post')) {
-					$type2 = 'post';
-				}
-				if (is_singular('product')) {
-					$type2 = 'product';
-				}
-				if (is_singular('page')) {
-					$type2 = 'page';
-				}
+				$type2 = 'singular';
 				$queried_object = $wp_query->get_queried_object();
 				$id = $queried_object->ID;
 				$type2 = $queried_object->post_type;
 			}
-			if (is_feed()) {
+			if ($type == 'other' && is_category()) {
+				$type = 'tax';
+				$type2 = 'category';
+				$queried_object = $wp_query->get_queried_object();
+				$id = $queried_object->term_id;
+			}
+			if ($type == 'other' && is_tag()) {
+				$type = 'tax';
+				$type2 = 'tag';
+				$queried_object = $wp_query->get_queried_object();
+				$id = $queried_object->term_id;
+			}
+			if ($type == 'other' && is_tax()) {
+				$type = 'tax';
+				$queried_object = $wp_query->get_queried_object();
+				$id = $queried_object->term_id;
+				$type2 = $queried_object->taxonomy;
+			}
+			if ($type == 'other' && is_feed()) {
 				$type = 'feed';		
 			}
-			if (is_date()) {
+			if ($type == 'other' && is_date()) {
 				$type = 'date';
 				if (is_day()) {
 					$type2 = 'day';
@@ -114,30 +129,12 @@ function wpss_footer() {
 					$id = get_the_time('Y');
 				}
 			}
-			if (is_tax()) {
-				$type = 'tax';
-				$queried_object = $wp_query->get_queried_object();
-				$id = $queried_object->term_id;
-				$type2 = $queried_object->taxonomy;
-			}
-			if (is_tag()) {
-				$type = 'tax';
-				$type2 = 'tag';
-				$queried_object = $wp_query->get_queried_object();
-				$id = $queried_object->term_id;
-			}
-			if (is_category()) {
-				$type = 'tax';
-				$type2 = 'category';
-				$queried_object = $wp_query->get_queried_object();
-				$id = $queried_object->term_id;
-			}
-			if (is_author()) {
+			if ($type == 'other' && is_author()) {
 				$type = 'author';
 				$queried_object = $wp_query->get_queried_object();
 				$id = $queried_object->author_id;
 			}
-			if (is_search()) {
+			if ($type == 'other' && is_search()) {
 				$type = 'search';
 			}
 			//
@@ -178,7 +175,7 @@ add_action('comment_post','wpss_comment_post',10,2);
 
 
 function wpss_determine_current_user($user_ID) {
-	if (!is_admin()) {
+	if (!defined('WP_ADMIN')) {
 		$settings = get_option('wpss_settings');
 		$donotlogout_s = $settings['donotlogout'];
 		$donotlogout = explode("\n",$donotlogout_s);
@@ -203,9 +200,9 @@ function wpss_determine_current_user($user_ID) {
 add_filter('determine_current_user','wpss_determine_current_user',1000);
 
 function wpss_home_url($url, $path, $orig_scheme, $blog_id) {
-	if (function_exists('is_user_logged_in') && is_user_logged_in()) {
-		$settings = get_option('wpss_settings');
-		if (count($settings['donotlogout_roles'])) {
+	$settings = get_option('wpss_settings');
+	if (is_array($settings['donotlogout_roles']) && count($settings['donotlogout_roles'])) {
+		if (function_exists('is_user_logged_in') && is_user_logged_in()) {
 			global $current_user;
 			$user_roles = $current_user->roles;
 			foreach ($user_roles as $role) {				
@@ -341,4 +338,9 @@ function wpss_update($post, $comment = 0 ) {
 	else {
 		wp_schedule_single_event( time()-60, 'wpss_clear' );
 	}
+}
+
+function wpss_admin_init() {
+	global $wpss_bypass;
+	$wpss_bypass = true;	
 }

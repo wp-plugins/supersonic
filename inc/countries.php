@@ -1,6 +1,7 @@
 <?php
 
-$wpss_countries = array('AF' => 'Afghanistan',
+function wpss_get_countries() {
+	return array('AF' => 'Afghanistan',
 'AX' => 'Aland Islands',
 'AL' => 'Albania',
 'DZ' => 'Algeria',
@@ -244,4 +245,5 @@ $wpss_countries = array('AF' => 'Afghanistan',
 'YE' => 'Yemen',
 'ZM' => 'Zambia',
 'ZW' => 'Zimbabwe'
-);
+	);
+}
