@@ -85,13 +85,20 @@ function wpss_config_handler() {
   echo '<div class="wrap">';
   echo '<div id="icon-settings" class="icon32"><br></div>';
   echo '<h2>Wordpress SuperSonic with CloudFlare</h2>';
+  if (isset($_GET['doclear']) && $_GET['doclear'] == 1) {
+  	do_action('wpss_clear');
+  }
 	global $wpdb;  
 	$sql = "select count(*) to_clear from ".$wpdb->prefix."wpss_clear";
 	$to_clear = $wpdb->get_row($sql);
 	if ($to_clear->to_clear) {
 		?>
 			<div class="error">
-    	    <p><?php _e( 'There are <b>'.$to_clear->to_clear.'</b> pages in queue to purge from CloudFlare cache.', 'wpss' ); ?></p>
+    	    <p>
+    	    	<?php _e( 'There are <b>'.$to_clear->to_clear.'</b> pages in queue to purge from CloudFlare cache.', 'wpss' ); ?>&nbsp;
+    	    	<a href="?page=wpss&tab=log&doclear=1"><?php _e( 'Purge now!', 'wpss' ); ?></a>&nbsp;<br/>
+    	    	<a href="?page=wpss&tab=tools&wpss_action=clear_all"><?php _e( 'Purge everything!', 'wpss' ); ?></a>
+    	    </p>
     	</div>   			
     <?php
 	}
@@ -710,9 +717,11 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<select name="<?php echo $protection_name; ?>-selectfrom" id="<?php echo $protection_name; ?>-selectfrom" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
 								$wpss_countries = wpss_get_countries();
-								foreach ($wpss_countries as $code => $name) {
-									if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
-										echo '<option value="'.$code.'">'.$name.'</option>';
+								if (is_array($wpss_countries)) {
+									foreach ($wpss_countries as $code => $name) {
+										if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
+											echo '<option value="'.$code.'">'.$name.'</option>';
+										}
 									}
 								}
 							?>
@@ -726,8 +735,10 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<label for="<?php echo $protection_name; ?>-countries">Selected</label><br/>
 							<select name="<?php echo $protection_name; ?>_countries[]" id="<?php echo $protection_name; ?>-countries" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
-								foreach ($settings['security'][$protection_name.'_countries'] as $code) {
-									echo '<option value="'.$code.'">'.$wpss_countries[$code].'</option>';
+								if (is_array($settings['security'][$protection_name.'_countries'])) {
+									foreach ($settings['security'][$protection_name.'_countries'] as $code) {
+										echo '<option value="'.$code.'">'.$wpss_countries[$code].'</option>';
+									}
 								}
 							?>
 							</select>
@@ -782,9 +793,11 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<select name="<?php echo $protection_name; ?>-selectfrom" id="<?php echo $protection_name; ?>-selectfrom" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
 								$wpss_countries = wpss_get_countries();
-								foreach ($wpss_countries as $code => $name) {
-									if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
-										echo '<option value="'.$code.'">'.$name.'</option>';
+								if (is_array($wpss_countries)) {
+									foreach ($wpss_countries as $code => $name) {
+										if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
+											echo '<option value="'.$code.'">'.$name.'</option>';
+										}
 									}
 								}
 							?>
@@ -798,8 +811,10 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<label for="<?php echo $protection_name; ?>-countries">Selected</label><br/>
 							<select name="<?php echo $protection_name; ?>_countries[]" id="<?php echo $protection_name; ?>-countries" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
-								foreach ($settings['security'][$protection_name.'_countries'] as $code) {
-									echo '<option value="'.$code.'">'.$wpss_countries[$code].'</option>';
+								if (is_array($settings['security'][$protection_name.'_countries'])) {
+									foreach ($settings['security'][$protection_name.'_countries'] as $code) {
+										echo '<option value="'.$code.'">'.$wpss_countries[$code].'</option>';
+									}
 								}
 							?>
 							</select>
@@ -854,9 +869,11 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<select name="<?php echo $protection_name; ?>-selectfrom" id="<?php echo $protection_name; ?>-selectfrom" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
 								$wpss_countries = wpss_get_countries();
-								foreach ($wpss_countries as $code => $name) {
-									if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
-										echo '<option value="'.$code.'">'.$name.'</option>';
+								if (is_array($wpss_countries)) {
+									foreach ($wpss_countries as $code => $name) {
+										if (!in_array($code,$settings['security'][$protection_name.'_countries'])) {
+											echo '<option value="'.$code.'">'.$name.'</option>';
+										}
 									}
 								}
 							?>
@@ -870,8 +887,10 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 							<label for="<?php echo $protection_name; ?>-countries">Selected</label><br/>
 							<select name="<?php echo $protection_name; ?>_countries[]" id="<?php echo $protection_name; ?>-countries" multiple size="10" style="min-width:250px; max-width:250px;">
 							<?php
-								foreach ($settings['security'][$protection_name.'_countries'] as $code) {
-									echo '<option value="'.$code.'">'.$wpss_countries[$code].'</option>';
+								if (is_array($settings['security'][$protection_name.'_countries'])) {
+									foreach ($settings['security'][$protection_name.'_countries'] as $code) {
+										echo '<option value="'.$code.'">'.$wpss_countries[$code].'</option>';
+									}
 								}
 							?>
 							</select>

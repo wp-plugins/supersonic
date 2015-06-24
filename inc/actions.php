@@ -39,12 +39,10 @@ if( !function_exists('apache_request_headers') ) {
 
 $wpss_bypass = false;
 function wpss_footer() {	
-	/*
 	global $wpss_bypass;
 	if ($wpss_bypass) {
 		return;
 	}
-	*/
 	$settings = get_option('wpss_settings');
 	if ($settings['cloudflare_api_key'] && (/*$settings['check_cf_ray'] == '0' || */$_SERVER['HTTP_CF_RAY'])) {
 		if ($_GET['preview'] == 'true') {
@@ -143,9 +141,10 @@ function wpss_footer() {
 		}
 	}
 }
-//add_action('wp_footer','wpss_footer');
+add_action('wp_footer','wpss_footer');
 add_action('template_redirect','wpss_footer',1);
-add_action('do_feed_rss2','wpss_footer',1);
+//add_action('shutdown','wpss_footer',1);
+//add_action('do_feed_rss2','wpss_footer',1);
 
 
 function wpss_save_post($post_id, $post, $update) {
@@ -252,6 +251,8 @@ function wpss_update($post, $comment = 0 ) {
 			$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => $row->url, 'priority' => 2));
 			$count_rows++;
 		}
+		$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => home_url(), 'priority' => 2));
+		$wpdb->replace($wpdb->prefix."wpss_clear",array('url' => home_url('/'), 'priority' => 2));
 	}
 	if (($comment == 0 && $settings['refresh'][$post_type.'_tax']) || ($comment && $settings['comments']['comment_tax'])) {
 		$taxonomies = get_taxonomies('','names'); 
@@ -314,6 +315,7 @@ function wpss_update($post, $comment = 0 ) {
 	if ($settings['add_clear']) {
 		$add_clear = explode("\n",$settings['add_clear']);
 		foreach ($add_clear as $url) {
+			$url = trim($url);
 			if (strpos($url,'*') !== false) {
 				$url = str_replace('*','%',$url);
 				$sql = 'select url from '.$wpdb->prefix.'wpss_links where url like \''.$url.'\'';

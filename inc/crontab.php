@@ -17,7 +17,7 @@ function wpss_clear_f($max_count = 99) {
 			return;
 		}
 		$count_row++;
-		$url = $row->url;
+		$url = trim($row->url);
 		if (strpos($url,'/') === 0) {
 			$url = site_url().$url;
 		}
@@ -25,12 +25,12 @@ function wpss_clear_f($max_count = 99) {
 			$url = trailingslashit(site_url());
 		}
 		$ret = $cf->zone_file_purge($settings['cloudflare_domain'],$url);		
-		//error_log('purge url='.$url);
-		//error_log('purge ret='.serialize($ret));
 		if ($ret->result != 'success') {
 			wp_schedule_single_event( time()+60, 'wpss_clear' );
 			wpss_log(20,'Purge failed: '.$ret->msg.' for &quot;'.$url.'&quot;');
-			return;
+			if (strpos($ret->msg,'Invalid url') === false) {
+				return;
+			}			
 		}
 		$wpdb->delete($wpdb->prefix.'wpss_clear',array('url' => $row->url));
 	}
