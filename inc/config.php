@@ -172,13 +172,15 @@ function wpss_config_handler() {
   			foreach ($ips as $ip) {
   				$ip = trim($ip);
   				if ($errors == '') {
-  					if ($tools_action = 'ban_ip') {
+  					if ($tools_action == 'ban_ip') {
   						$ret = $cf->ban($ip);
+  						//echo '-'.$ip.'-';
+  						//echo (serialize($ret));
   					}
-  					if ($tools_action = 'wl_ip') {
+  					if ($tools_action == 'wl_ip') {
   						$ret = $cf->wl($ip);
   					}
-  					if ($tools_action = 'nul_ip') {
+  					if ($tools_action == 'nul_ip') {
   						$ret = $cf->nul($ip);
   					}
 						if ($ret->result != 'success') {
@@ -321,20 +323,20 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
 				echo '<table class="form-table">';
 				?>
         <tr>
-        	<th><label for="wpss_cloudflare_login">Cloudflare login:</label></th>
+        	<th><label for="wpss_cloudflare_login">CloudFlare login:</label></th>
             <td>
                <input style="width:340px;" id="wpss_cloudflare_login" name="wpss_cloudflare_login" type="email" value="<?php echo $settings['cloudflare_login']; ?>" /><br/>
             </td>
         </tr>
         <tr>
-        	<th><label for="wpss_cloudflare_api_key">Cloudflare API key:</label></th>
+        	<th><label for="wpss_cloudflare_api_key">CloudFlare API key:</label></th>
             <td>
                <input style="width:340px;" id="wpss_cloudflare_api_key" name="wpss_cloudflare_api_key" type="text" value="<?php echo $settings['cloudflare_api_key']; ?>" /><br/>
                <span class="description">CloudFlare API key You can find <a href="https://www.cloudflare.com/my-account">here</a>.</span>               
             </td>
         </tr>
         <tr>
-        	<th><label for="wpss_cloudflare_api_key">Cloudflare domain:</label></th>
+        	<th><label for="wpss_cloudflare_api_key">CloudFlare domain:</label></th>
             <td>
                <input style="width:340px;" id="wpss_cloudflare_domain" name="wpss_cloudflare_domain" type="text" value="<?php echo $settings['cloudflare_domain']; ?>" /><br/>
                <span class="description">Domain must be added and activated on Your CloudFlare account.</span>                              
@@ -497,7 +499,7 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
         <tr>
         	<th></th>
             <td>
-            	<a href="https://www.cloudflare.com/a/firewall/<?php echo $settings['cloudflare_domain']; ?>/ip_firewall" target="_blank">Cloudflare Firewall</a>
+            	<a href="https://www.cloudflare.com/a/firewall/<?php echo $settings['cloudflare_domain']; ?>/ip_firewall" target="_blank">CloudFlare Firewall</a>
             </td>
         </tr>        
         <?php				
@@ -1030,7 +1032,7 @@ Wordpress SuperSonic with CloudFlare has required a great deal of time and effor
 			<?php 
 				if ($current != 'tools'	&& $current != 'statistics' && $current != 'documentation' && $current != 'log' && $current != 'donate') {
 			?>
-  		<input type="submit" name="Submit"  class="button-primary" value="<?php echo (($current == 'cloudflare')?"Update Settings and Test CLoudflare connection":"Update Settings"); ?>" />
+  		<input type="submit" name="Submit"  class="button-primary" value="<?php echo (($current == 'cloudflare')?"Update Settings and Test CloudFlare connection":"Update Settings"); ?>" />
       <input type="hidden" name="wpss-config-submit" value="Y" />
    		</p>
 			</form>
