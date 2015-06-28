@@ -155,7 +155,7 @@ function wpss_save_post($post_id, $post, $update) {
 }
 add_action( 'save_post', 'wpss_save_post', 10, 3);
 
-function wpss_save_comment($comment_id,$comment_approved) {
+function wpss_save_comment($comment_id,$comment_approved = 'delete') {
 	$comment = get_comment($comment_id);
 	$post = get_post($comment->comment_post_ID);
 	wpss_update($post, 1);

@@ -115,31 +115,31 @@ function wpss_config_handler() {
         <p><?php _e( 'Settings updated!', 'wpss' ); ?></p>
     </div>   	
     <?php
-  }	
-  else if ($_GET['testcf']) {
-  	$settings = get_option( "wpss_settings" );
-		$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);  	
-		$url = site_url().'/?testcf';
-		$ret = $cf->stats($settings['cloudflare_domain'],40);
-		if ($ret->result != 'success') {
-			$msg = '';
-			if (is_object($ret)) {
-				$msg = '<b>'.$ret->msg.'</b>';
+	  if (!isset($_GET['tab']) || $_GET['tab'] == 'cloudflare') {
+  		$settings = get_option( "wpss_settings" );
+			$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);  	
+			$url = site_url().'/?testcf';
+			$ret = $cf->stats($settings['cloudflare_domain'],40);
+			if ($ret->result != 'success') {
+				$msg = '';
+				if (is_object($ret)) {
+					$msg = '<b>'.$ret->msg.'</b>';
+				}
+	   		?>
+				<div class="error">
+  	  	    <p><?php _e( 'CloudFlare test not passed! '.$msg, 'wpss' ); ?></p>
+    		</div>   	
+    		<?php
 			}
-	   	?>
-			<div class="error">
-    	    <p><?php _e( 'CloudFlare test not passed! '.$msg, 'wpss' ); ?></p>
-    	</div>   	
-    	<?php
-		}
-		else {
-	   	?>
-			<div class="updated">
-    	    <p><?php _e( 'CloudFlare test passed.', 'wpss' ); ?></p>
-    	</div>   	
-    	<?php
-		}		
-  }
+			else {
+		   	?>
+				<div class="updated">
+    		    <p><?php _e( 'CloudFlare test passed.', 'wpss' ); ?></p>
+	    	</div>   	
+  	  	<?php
+			}		
+  	}
+  }	
   else if ($_GET['tab'] == 'tools') {
   	$settings = get_option( "wpss_settings" );  	
   	$tools_action = $_POST['tools_action'];
@@ -340,10 +340,12 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
                <span class="description">Domain must be added and activated on Your CloudFlare account.</span>                              
             </td>
         </tr>
+        <?php /*
         <tr>
         	<th></th>
         	<td><a href="<?php echo admin_url( 'admin.php?page=wpss&testcf=1' ); ?>" class="button">Test CloudFlare Connection</a></td>
         </tr>
+        */ ?>
         <?php				
 				echo '</table>';
 			}
@@ -491,7 +493,13 @@ function wpss_config_handler_tabs( $current = 'cloudflare' ) {
            			<input type="button" name="wl_ip" class="button" value="Nul" onclick="jQuery('#tools_action_ip').val('nul_ip');this.form.submit();">           			
            		</form>
             </td>
-        </tr>
+        </tr>        
+        <tr>
+        	<th></th>
+            <td>
+            	<a href="https://www.cloudflare.com/a/firewall/<?php echo $settings['cloudflare_domain']; ?>/ip_firewall" target="_blank">Cloudflare Firewall</a>
+            </td>
+        </tr>        
         <?php				
 				echo '</table>';								
 			}
@@ -1022,7 +1030,7 @@ Wordpress SuperSonic with CloudFlare has required a great deal of time and effor
 			<?php 
 				if ($current != 'tools'	&& $current != 'statistics' && $current != 'documentation' && $current != 'log' && $current != 'donate') {
 			?>
-  		<input type="submit" name="Submit"  class="button-primary" value="Update Settings" />
+  		<input type="submit" name="Submit"  class="button-primary" value="<?php echo (($current == 'cloudflare')?"Update Settings and Test CLoudflare connection":"Update Settings"); ?>" />
       <input type="hidden" name="wpss-config-submit" value="Y" />
    		</p>
 			</form>
