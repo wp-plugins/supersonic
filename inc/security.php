@@ -121,12 +121,14 @@ function wpss_login_failed($username) {
 		if ($ip_data['count'] > intval($settings['security']['bruteforce_attempts'])) {
 			$cf = new cloudflare_api($settings['cloudflare_login'], $settings['cloudflare_api_key']);			
 			$ret = $cf->ban($ip);			
-			if ($ret->status == 'success') {
+			if ($ret->result == 'success') {
 				unset($bruteforce[$ip]);
 				wpss_log(6, 'Username: '.$username);
+				wp_mail(get_option('admin_email'),"SuperSonic bruteforce protection on [".get_option('siteurl')."]","User blocked\nIP:$ip\nUsername:$username");
 			}
 			else {
 				wpss_log(6, 'CloudFlare error: '.$ret->msg.'<br>Username: '.$username);
+				wp_mail(get_option('admin_email'),"SuperSonic bruteforce protection failed on [".get_option('siteurl')."]","User blocked\nIP:$ip\nUsername:$username\nCloudFlare error:".$ret->msg);
 			}
 		}
 		else {

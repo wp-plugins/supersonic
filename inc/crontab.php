@@ -32,7 +32,9 @@ function wpss_clear_f($max_count = 99) {
 				return;
 			}			
 		}
-		$wpdb->delete($wpdb->prefix.'wpss_clear',array('url' => $row->url));
+		else {
+			$wpdb->delete($wpdb->prefix.'wpss_clear',array('url' => $row->url));
+		}
 	}
 }
 add_action('wpss_clear','wpss_clear_f');
