@@ -87,8 +87,8 @@ If you have Page Rule with URL pattern /wp-admin/* or /wp-admin* siply change UR
 == Changelog ==
 
 = 1.3.2 =
-* Fixed Admin Bar visibility for logged-in users (https://wordpress.org/support/topic/admin-bar-visibility-for-logged-in-users-not-working)
-* Fixed bug in deleting comments (https://wordpress.org/support/topic/delete-comments-results-in-db-error-in-server-log)
+* Fixed Admin Bar visibility for logged-in users 
+* Fixed bug in deleting comments
 
 = 1.3.1 =
 * Fixed bug in purge procedure
