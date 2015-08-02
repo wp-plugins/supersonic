@@ -158,10 +158,13 @@ add_action( 'save_post', 'wpss_save_post', 10, 3);
 function wpss_save_comment($comment_id,$comment_approved = 'delete') {
 	$comment = get_comment($comment_id);
 	$post = get_post($comment->comment_post_ID);
-	wpss_update($post, 1);
+	if ($post) {
+		wpss_update($post, 1);
+	}
 }
 add_action('wp_set_comment_status','wpss_save_comment',10,2);
 add_action('edit_comment','wpss_save_comment',10,2);
+add_action('delete_comment','wpss_save_comment',10,2);
 
 function wpss_comment_post($comment_id,$comment_approved) {	
 	//if ($comment_approved == '1') {
@@ -187,7 +190,7 @@ function wpss_determine_current_user($user_ID) {
 		if ($_GET['preview'] == 'true') {
 			return $user_ID;
 		}
-		if ($_REQUEST['supersonic'] == untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))) {
+		if (isset($_REQUEST['supersonic']) && untrailingslashit($_REQUEST['supersonic']) == untrailingslashit(substr(admin_url(),trailingslashit(strlen(site_url())+1)))) {
 			return $user_ID;
 		}
 		return false;
